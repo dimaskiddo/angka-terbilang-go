@@ -5,15 +5,15 @@ import (
 	"strings"
 )
 
+// Definisi Array Angka dan Units
+var arrAngka = [...]string{"", "satu", "dua", "tiga", "empat", "lima", "enam", "tujuh", "delapan", "sembilan"}
+var arrUnits = [...]string{"", "ribu", "juta", "milyar", "triliun", "quadriliun", "quintiliun", "sextiliun", "septiliun", "oktiliun", "noniliun", "desiliun",
+	"undesiliun", "duodesiliun", "tredesiliun", "quattuordesiliun", "quindesiliun", "sexdesiliun", "septendesiliun", "oktodesiliun", "novemdesiliun", "vigintiliun"}
+
 // ToTerbilang Function
 func ToTerbilang(angka string) (string, error) {
 	// Definisi Variabel Hasil Konversi Terbilang
 	var resTerbilang string
-
-	// Definisi Array Angka dan Unit
-	arrAngka := [10]string{"", "satu", "dua", "tiga", "empat", "lima", "enam", "tujuh", "delapan", "sembilan"}
-	arrUnits := [22]string{"", "ribu", "juta", "milyar", "triliun", "quadriliun", "quintiliun", "sextiliun", "septiliun", "oktiliun", "noniliun", "desiliun",
-		"undesiliun", "duodesiliun", "tredesiliun", "quattuordesiliun", "quindesiliun", "sexdesiliun", "septendesiliun", "oktodesiliun", "novemdesiliun", "vigintiliun"}
 
 	// Trim Inputan Angka
 	// dan Cari Panjang Angka String
