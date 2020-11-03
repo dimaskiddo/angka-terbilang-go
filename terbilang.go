@@ -18,12 +18,12 @@ func ToTerbilang(angka string) (string, error) {
 	// Trim Inputan Angka
 	// dan Cari Panjang Angka String
 	strAngka := strings.TrimSpace(angka)
-	lenAngka := len(strAngka)
+	lenAngka := len(strAngka) - 1
 
 	// Loop Angka String dan Konversi
-	for i := 0; i < lenAngka; i++ {
+	for i := 0; i <= lenAngka; i++ {
 		// Cari Posisi Digit
-		posDigit := (lenAngka - 1) - i
+		posDigit := lenAngka - i
 		grpDigit := posDigit % 3
 
 		// Konversi Angka String ke Angka Int
@@ -69,7 +69,7 @@ func ToTerbilang(angka string) (string, error) {
 				grpDigit--
 
 			case 0:
-				if i == (lenAngka-1) || (lenAngka-1) > 4 {
+				if i == lenAngka || lenAngka > 4 {
 					// Proses Satu
 					resTerbilang += arrAngka[intAngka] + " "
 				} else {
@@ -80,7 +80,7 @@ func ToTerbilang(angka string) (string, error) {
 			}
 
 		case 0:
-			if i == (lenAngka-1) && (lenAngka-1) == 0 {
+			if i == lenAngka && lenAngka == 0 {
 				// Proses Nol
 				return "nol", nil
 			}
