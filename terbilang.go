@@ -93,13 +93,14 @@ func ToTerbilang(angka string) (string, error) {
 		}
 
 		if grpDigit == 0 {
-			if i == 0 && intAngka == 1 {
+			grpUnits := posDigit / 3
+			if i == 0 && intAngka == 1 && grpUnits <= 1 {
 				// Cara Bar-Bar Hapus Konversi "Satu"
 				// Dan Append Bentuk Baru :D
 				resTerbilang = strings.TrimSuffix(resTerbilang, arrAngka[intAngka]+" ")
-				resTerbilang += "se" + arrUnits[(posDigit/3)] + " "
+				resTerbilang += "se" + arrUnits[grpUnits] + " "
 			} else {
-				resTerbilang += arrUnits[(posDigit/3)] + " "
+				resTerbilang += arrUnits[grpUnits] + " "
 			}
 		}
 	}
