@@ -5,9 +5,9 @@ import (
 	"strings"
 )
 
-// Definisi Array Angka dan Units
+// Definisi Array Angka dan Satuan
 var arrAngka = [...]string{"", "satu", "dua", "tiga", "empat", "lima", "enam", "tujuh", "delapan", "sembilan"}
-var arrUnits = [...]string{"", "ribu", "juta", "milyar", "triliun", "quadriliun", "quintiliun", "sextiliun", "septiliun", "oktiliun", "noniliun", "desiliun",
+var arrSatuan = [...]string{"", "ribu", "juta", "milyar", "triliun", "quadriliun", "quintiliun", "sextiliun", "septiliun", "oktiliun", "noniliun", "desiliun",
 	"undesiliun", "duodesiliun", "tredesiliun", "quattuordesiliun", "quindesiliun", "sexdesiliun", "septendesiliun", "oktodesiliun", "novemdesiliun", "vigintiliun"}
 
 // ToTerbilang Function
@@ -87,10 +87,9 @@ func ToTerbilang(angka string) (string, error) {
 			continue
 
 		default:
+			// Proses Angka
 			resTerbilang += arrAngka[intAngka] + " "
-		}
 
-		if intAngka > 1 {
 			switch grpDigit {
 			case 2:
 				// Proses Ratusan
@@ -102,8 +101,9 @@ func ToTerbilang(angka string) (string, error) {
 			}
 		}
 
+		// Proses Satuan
 		if grpDigit == 0 {
-			resTerbilang += arrUnits[posDigit/3] + " "
+			resTerbilang += arrSatuan[posDigit/3] + " "
 		}
 	}
 
