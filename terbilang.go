@@ -10,6 +10,9 @@ var arrAngka = [...]string{"", "satu", "dua", "tiga", "empat", "lima", "enam", "
 var arrSatuan = [...]string{"", "ribu", "juta", "milyar", "triliun", "quadriliun", "quintiliun", "sextiliun", "septiliun", "oktiliun", "noniliun", "desiliun",
 	"undesiliun", "duodesiliun", "tredesiliun", "quattuordesiliun", "quindesiliun", "sexdesiliun", "septendesiliun", "oktodesiliun", "novemdesiliun", "vigintiliun"}
 
+// Hitung Panjang Array Satuan
+var lenSatuan = len(arrSatuan) - 1
+
 // ToTerbilang Function
 func ToTerbilang(angka string) (string, error) {
 	// Definisi Variabel Hasil Konversi Terbilang
@@ -51,13 +54,13 @@ func ToTerbilang(angka string) (string, error) {
 				}
 
 				switch nextIntAngka {
-				case 0:
-					// Proses Sepuluh
-					resTerbilang += "sepuluh "
-
 				case 1:
 					// Proses Sebelas
 					resTerbilang += "sebelas "
+
+				case 0:
+					// Proses Sepuluh
+					resTerbilang += "sepuluh "
 
 				default:
 					// Proses Belasan
@@ -75,6 +78,9 @@ func ToTerbilang(angka string) (string, error) {
 				if (intAngka == 1 && posDigit == 3) && (cntZero == 2 || lenAngka == 3) {
 					// Proses Seribu
 					resTerbilang += "seribu "
+
+					// Reset Penghitung Nol
+					cntZero = 0
 					continue
 				} else {
 					// Proses Satu
@@ -87,6 +93,8 @@ func ToTerbilang(angka string) (string, error) {
 				// Proses Nol
 				return "nol", nil
 			}
+
+			// Hitung Nol
 			cntZero++
 			break
 
@@ -105,13 +113,24 @@ func ToTerbilang(angka string) (string, error) {
 			}
 		}
 
-		// Proses Satuan
+		// Konversi Satuan
 		if grpDigit == 0 {
-			if cntZero != 3 {
-				resTerbilang += arrSatuan[posDigit/3] + " "
+			// Cari Posisi Satuan
+			posSatuan := posDigit / 3
+
+			// Pastikan Satuan Tidak Out of Bound dari Array Satuan
+			if posSatuan > lenSatuan {
+				// Kurangi Posisi Satuan dengan Panjangan Array Satuan
+				// Sehinga Menggunakan Satuan Awal
+				posSatuan %= lenSatuan
 			}
 
-			// Reset Counter Nol
+			if cntZero < 3 || (cntZero == 3 && posSatuan == lenSatuan) {
+				// Proses Satuan
+				resTerbilang += arrSatuan[posSatuan] + " "
+			}
+
+			// Reset Pneghitung Nol
 			cntZero = 0
 		}
 	}
