@@ -20,6 +20,9 @@ func ToTerbilang(angka string) (string, error) {
 	strAngka := strings.TrimSpace(angka)
 	lenAngka := len(strAngka) - 1
 
+	// Set Counter Nol
+	cntZero := 0
+
 	// Loop Angka String dan Konversi
 	for i := 0; i <= lenAngka; i++ {
 		// Cari Posisi Digit
@@ -69,13 +72,13 @@ func ToTerbilang(angka string) (string, error) {
 				grpDigit--
 
 			case 0:
-				if i == lenAngka || lenAngka > 4 {
-					// Proses Satu
-					resTerbilang += arrAngka[intAngka] + " "
-				} else {
+				if (intAngka == 1 && posDigit == 3) && (cntZero == 2 || lenAngka == 3) {
 					// Proses Seribu
 					resTerbilang += "seribu "
 					continue
+				} else {
+					// Proses Satu
+					resTerbilang += arrAngka[intAngka] + " "
 				}
 			}
 
@@ -84,7 +87,8 @@ func ToTerbilang(angka string) (string, error) {
 				// Proses Nol
 				return "nol", nil
 			}
-			continue
+			cntZero++
+			break
 
 		default:
 			// Proses Angka
@@ -103,7 +107,12 @@ func ToTerbilang(angka string) (string, error) {
 
 		// Proses Satuan
 		if grpDigit == 0 {
-			resTerbilang += arrSatuan[posDigit/3] + " "
+			if cntZero != 3 {
+				resTerbilang += arrSatuan[posDigit/3] + " "
+			}
+
+			// Reset Counter Nol
+			cntZero = 0
 		}
 	}
 
