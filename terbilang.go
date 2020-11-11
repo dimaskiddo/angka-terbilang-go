@@ -1,8 +1,8 @@
 package angka
 
 import (
+	"errors"
 	"strconv"
-	"strings"
 )
 
 // Definisi Array Angka dan Satuan
@@ -10,30 +10,49 @@ var arrAngka = [...]string{"", "satu", "dua", "tiga", "empat", "lima", "enam", "
 var arrSatuan = [...]string{"", "ribu", "juta", "milyar", "triliun", "quadriliun", "quintiliun", "sextiliun", "septiliun", "oktiliun", "noniliun", "desiliun",
 	"undesiliun", "duodesiliun", "tredesiliun", "quattuordesiliun", "quindesiliun", "sexdesiliun", "septendesiliun", "oktodesiliun", "novemdesiliun", "vigintiliun"}
 
-// Hitung Panjang Array Satuan
-var lenSatuan = len(arrSatuan) - 1
-
 // ToTerbilang Function
-func ToTerbilang(angka string) (string, error) {
-	// Definisi Variabel Hasil Konversi Terbilang
-	var resTerbilang string
+func ToTerbilang(strAngka string) (string, error) {
+	// Jika Inputan Bukan Angka Maka Return Error
+	if _, err := strconv.ParseFloat(strAngka, 10); err != nil {
+		return "", errors.New("Error, input is not a valid number!")
+	}
 
-	// Trim Inputan Angka
-	// dan Cari Panjang Angka String
-	strAngka := strings.TrimSpace(angka)
+	// Cari Panjang Angka String
 	lenAngka := len(strAngka) - 1
+
+	// Konversi Angka String ke Nol
+	intAngka, err := strconv.Atoi(string(strAngka[0]))
+	if err != nil {
+		return "", err
+	}
+
+	// Jika Panjang Angka Nol dan Angka Pertama adalah Nol Maka Proses Nol
+	if lenAngka == 0 && intAngka == 0 {
+		return "nol", nil
+	}
+
+	// Jika Angka Over dari Satuan Maka Return Error
+	if (lenAngka / 3) > len(arrSatuan) {
+		return "", errors.New("Error, number is to big!")
+	}
+
+	// Definisi Variabel Hasil Konversi Terbilang
+	resTerbilang := ""
 
 	// Set Counter Nol
 	cntZero := 0
 
 	// Loop Angka String dan Konversi
 	for i := 0; i <= lenAngka; i++ {
+		// Set Variable Sementara Hasil Konversi
+		tmpTerbilang := ""
+
 		// Cari Posisi Digit
 		posDigit := lenAngka - i
 		grpDigit := posDigit % 3
 
 		// Konversi Angka String ke Angka Int
-		intAngka, err := strconv.Atoi(string(strAngka[i]))
+		intAngka, err = strconv.Atoi(string(strAngka[i]))
 		if err != nil {
 			return "", err
 		}
@@ -44,7 +63,7 @@ func ToTerbilang(angka string) (string, error) {
 			switch grpDigit {
 			case 2:
 				// Proses Seratus
-				resTerbilang += "seratus "
+				tmpTerbilang += "seratus"
 
 			case 1:
 				// Konversi Angka String Selanjutnya ke Angka Int Selanjutnya
@@ -56,15 +75,15 @@ func ToTerbilang(angka string) (string, error) {
 				switch nextIntAngka {
 				case 1:
 					// Proses Sebelas
-					resTerbilang += "sebelas "
+					tmpTerbilang += "sebelas"
 
 				case 0:
 					// Proses Sepuluh
-					resTerbilang += "sepuluh "
+					tmpTerbilang += "sepuluh"
 
 				default:
 					// Proses Belasan
-					resTerbilang += arrAngka[nextIntAngka] + " belas "
+					tmpTerbilang += arrAngka[nextIntAngka] + " belas"
 				}
 
 				// Skip Angka Selanjutnya
@@ -76,58 +95,61 @@ func ToTerbilang(angka string) (string, error) {
 
 			case 0:
 				if (intAngka == 1 && posDigit == 3) && (cntZero == 2 || lenAngka == 3) {
+					// Tambah Spasi
+					if resTerbilang != "" {
+						resTerbilang += " "
+					}
+
 					// Proses Seribu
-					resTerbilang += "seribu "
+					resTerbilang += "seribu"
 
 					// Reset Penghitung Nol
 					cntZero = 0
 					continue
 				} else {
 					// Proses Satu
-					resTerbilang += arrAngka[intAngka] + " "
+					tmpTerbilang += arrAngka[intAngka]
 				}
 			}
 
 		case 0:
-			if i == lenAngka && lenAngka == 0 {
-				// Proses Nol
-				return "nol", nil
-			}
-
 			// Hitung Nol
 			cntZero++
 			break
 
 		default:
 			// Proses Angka
-			resTerbilang += arrAngka[intAngka] + " "
+			tmpTerbilang += arrAngka[intAngka]
 
 			switch grpDigit {
 			case 2:
 				// Proses Ratusan
-				resTerbilang += "ratus "
+				tmpTerbilang += " ratus"
 
 			case 1:
 				// Proses Puluhan
-				resTerbilang += "puluh "
+				tmpTerbilang += " puluh"
 			}
 		}
 
-		// Konversi Satuan
-		if grpDigit == 0 {
-			// Cari Posisi Satuan
-			posSatuan := posDigit / 3
-
-			// Pastikan Satuan Tidak Out of Bound dari Array Satuan
-			if posSatuan > lenSatuan {
-				// Kurangi Posisi Satuan dengan Panjangan Array Satuan
-				// Sehinga Menggunakan Satuan Awal
-				posSatuan %= lenSatuan
+		// Prepand Spasi
+		if tmpTerbilang != "" {
+			// Tambah Spasi
+			if resTerbilang != "" {
+				resTerbilang += " " + tmpTerbilang
+			} else {
+				resTerbilang += tmpTerbilang
 			}
+		}
 
-			if cntZero < 3 || (cntZero == 3 && posSatuan == lenSatuan) {
+		// Cari Posisi Satuan
+		posSatuan := posDigit / 3
+
+		// Konversi Satuan
+		if grpDigit == 0 && posSatuan != 0 {
+			if cntZero != 3 {
 				// Proses Satuan
-				resTerbilang += arrSatuan[posSatuan] + " "
+				resTerbilang += " " + arrSatuan[posSatuan]
 			}
 
 			// Reset Pneghitung Nol
@@ -136,5 +158,5 @@ func ToTerbilang(angka string) (string, error) {
 	}
 
 	// Trim Hasil Konversi dan Return
-	return strings.TrimSpace(resTerbilang), nil
+	return resTerbilang, nil
 }
