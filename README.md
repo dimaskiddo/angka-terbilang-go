@@ -1,7 +1,5 @@
 # Go package for Converting Decimal to an Indonesian Wording format
 
-***This package is still in early development and might contain a bug***
-
 This package will help you to convert a decimal to an Indonesian wording format, for example `123` will be converted to `seratus dua puluh tiga`. This package was inspired from [develoka/angka-terbilang-js](https://github.com/develoka/angka-terbilang-js) by [Develoka Team](https://github.com/develoka).
 
 ## Getting Started
